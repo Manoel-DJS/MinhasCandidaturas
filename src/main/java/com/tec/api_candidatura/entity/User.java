@@ -19,6 +19,7 @@ import java.util.UUID;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userid;
 
     @Column(nullable = false, length = 100)
@@ -45,5 +46,12 @@ public class User {
         ROLE_ADMIN,
         ROLE_USER
     }
-
+    @PrePersist
+    private void prePersist() {
+        this.createdDate = LocalDateTime.now();
+    }
+    @PreUpdate
+    private void preUpdate() {
+        this.updatedDate = LocalDateTime.now();
+    }
 }
