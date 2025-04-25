@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_jobvacancy")
-public class Job {
+@Table(name = "tb_job_vacancies")
+public class JobVacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,7 +26,7 @@ public class Job {
     private String jobTitle;
     @Column(nullable = false, length = 100)
     private String jobCompany;
-    @Column(nullable = false, length = 250)
+    @Column(nullable = false)
     private String jobDescription;
     @Column(nullable = false, length = 120)
     private String location;
@@ -41,20 +41,20 @@ public class Job {
 
     @Column(name = "created_jog_vacancy", updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime createdJobVacancy;
+    private LocalDateTime createdDate;
 
     @Column(name = "updated_job_vacancy")
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime updatedJobVacancy;
+    private LocalDateTime updatedDate;
 
     @PrePersist
     private void prePersist(){
-        this.createdJobVacancy = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
     }
 
     @PreUpdate
     private void preUpdate(){
-        this.updatedJobVacancy = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
     }
 
 }
