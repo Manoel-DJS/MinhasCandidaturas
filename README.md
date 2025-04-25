@@ -36,5 +36,6 @@ classDiagram
     Usuario "1" --> "0..*" Vaga : adiciona
     Vaga "1" --> "1" Candidatura : tem
     Candidatura --> StatusCandidatura
+    Usuario "1" --> "0..*" Candidatura: pode
 
 ```
