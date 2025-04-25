@@ -51,6 +51,9 @@ public class JobVacancy {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(mappedBy = "jobVacancy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Candidature candidature;
+
     @PrePersist
     private void prePersist(){
         this.createdDate = LocalDateTime.now();

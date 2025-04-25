@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_candidature")
+@Table(name = "tb_candidatures")
 public class Candidature {
 
     @Id
@@ -28,15 +28,19 @@ public class Candidature {
 
     @Column(name = "createdCandi_date", updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime candidatureDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "updateCandi_date")
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime updateDate;
 
+    @OneToOne
+    @JoinColumn(name = "job_vacancy_id")
+    private JobVacancy jobVacancy;
+
     @PrePersist
     private void prePersist(){
-        this.candidatureDate = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
     }
 
     @PreUpdate
