@@ -47,6 +47,10 @@ public class JobVacancy {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime updatedDate;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @PrePersist
     private void prePersist(){
         this.createdDate = LocalDateTime.now();
