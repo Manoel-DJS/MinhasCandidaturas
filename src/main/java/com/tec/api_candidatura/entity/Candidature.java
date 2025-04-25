@@ -20,7 +20,7 @@ public class Candidature {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long candidature_id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "statusCandidature")
