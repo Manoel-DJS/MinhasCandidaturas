@@ -1,14 +1,19 @@
 package com.tec.api_candidatura.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tec.api_candidatura.entity.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,7 +40,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 25)
-    private Role role;
+    private UserRole role;
 
     @Column(name = "created_date", updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -48,10 +53,42 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobVacancy> jobVacancies = new ArrayList<>();
 
-    public enum Role {
-        ROLE_ADMIN,
-        ROLE_USER
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     @PrePersist
     private void prePersist() {
         this.createdDate = LocalDateTime.now();
