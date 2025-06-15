@@ -22,8 +22,10 @@ public class JobVacancyServiceImpl implements JobVacancyService {
         JobVacancy vacancy = new JobVacancy();
         vacancy.setJobTitle(dto.title());
         vacancy.setJobDescription(dto.description());
+        vacancy.setJobCompany(dto.jobCompany());
+        vacancy.setLocation(dto.location());
         vacancy.setJobVacancyType(dto.type());
-        vacancy.setJobVacancyStatus(JobVacancyStatus.OPEN);
+        vacancy.setJobVacancyStatus(dto.status());
 
         repository.save(vacancy);
         return toDto(vacancy);
@@ -49,6 +51,8 @@ public class JobVacancyServiceImpl implements JobVacancyService {
                 job.getId(),
                 job.getJobTitle(),
                 job.getJobDescription(),
+                job.getJobCompany(),
+                job.getLocation(),
                 job.getJobVacancyType(),
                 job.getJobVacancyStatus()
         );
