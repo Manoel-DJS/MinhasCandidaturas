@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +34,24 @@ public class JobVacancyServiceImpl implements JobVacancyService {
 
     @Override
     public JobVacancyResponseDto update(Long id, UpdateJobVacancyDto dto) {
-        return null;
+        JobVacancy vacancy = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job vacancy not found"));
+
+        vacancy.setJobDescription(dto.description());
+        vacancy.setJobVacancyStatus(dto.status());
+
+        repository.save(vacancy);
+        return toDto(vacancy);
     }
 
     @Override
     public void delete(Long id) {
-
+        repository.deleteById(id);
     }
 
     @Override
     public List<JobVacancyResponseDto> findAll() {
-        return null;
+        return repository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
     private JobVacancyResponseDto toDto(JobVacancy job) {
