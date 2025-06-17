@@ -38,6 +38,10 @@ public class Candidature {
     @JoinColumn(name = "job_vacancy_id")
     private JobVacancy jobVacancy;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @PrePersist
     private void prePersist(){
         this.createdDate = LocalDateTime.now();
