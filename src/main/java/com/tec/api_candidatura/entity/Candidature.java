@@ -34,7 +34,7 @@ public class Candidature {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime updateDate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "job_vacancy_id")
     private JobVacancy jobVacancy;
 

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -51,8 +53,8 @@ public class JobVacancy {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "jobVacancy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Candidature candidature;
+    @OneToMany(mappedBy = "jobVacancy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Candidature> candidatures = new ArrayList<>();
 
     @PrePersist
     private void prePersist(){
