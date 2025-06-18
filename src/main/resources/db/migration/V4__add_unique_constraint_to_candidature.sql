@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX unique_user_vacancy ON tb_candidatures(user_id, job_vacancy_id);
