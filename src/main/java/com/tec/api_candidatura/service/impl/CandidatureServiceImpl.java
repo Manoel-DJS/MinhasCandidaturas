@@ -1,6 +1,9 @@
 package com.tec.api_candidatura.service.impl;
 
 import com.tec.api_candidatura.entity.Candidature;
+import com.tec.api_candidatura.entity.JobVacancy;
+import com.tec.api_candidatura.entity.User;
+import com.tec.api_candidatura.entity.enums.StatusCandidature;
 import com.tec.api_candidatura.repository.CandidatureRepository;
 import com.tec.api_candidatura.repository.JobVacancyRepository;
 import com.tec.api_candidatura.repository.UserRepository;
@@ -12,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +27,33 @@ public class CandidatureServiceImpl implements CandidatureService {
     private final JobVacancyRepository jobVacancyRepository;
     @Override
     public CandidatureResponseDto apply(CreateCandidatureDto dto) {
-        return null;
+        User user = userRepository.findById(dto.userId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        JobVacancy vacancy = jobVacancyRepository.findById(dto.jobVacancyId())
+                .orElseThrow(() -> new RuntimeException("Job vacancy not found"));
+
+        // Verifica se o usuário já se candidatou a esta vaga
+        Optional<Candidature> existing = candidatureRepository
+                .findByUserIdAndJobVacancyId(user.getId(), vacancy.getId());
+
+        if (existing.isPresent()) {
+            throw new RuntimeException("User has already applied to this job vacancy.");
+        }
+
+        Candidature candidature = new Candidature();
+        candidature.setUser(user);
+        candidature.setJobVacancy(vacancy);
+        candidature.setStatusCandidature(StatusCandidature.SUBMITTED);
+
+        candidatureRepository.save(candidature);
+
+        return toDto(candidature);
     }
 
     @Override
     public List<CandidatureResponseDto> getAll() {
-        return null;
+        return candidatureRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
 
@@ -35,7 +61,7 @@ public class CandidatureServiceImpl implements CandidatureService {
     private CandidatureResponseDto toDto(Candidature c) {
         return new CandidatureResponseDto(
                 c.getId(),
-                c.getClass().getName(), // vai da erro aqui
+                c.getUser().getName(), // vai da erro aqui
                 c.getJobVacancy().getJobTitle(),
                 c.getStatusCandidature());
     }
