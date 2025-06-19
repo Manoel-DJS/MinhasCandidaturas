@@ -1,10 +1,13 @@
 package com.tec.api_candidatura.web.controller;
 
 import com.tec.api_candidatura.service.CandidatureService;
+import com.tec.api_candidatura.web.dto.request.ApplyToVacancyDto;
 import com.tec.api_candidatura.web.dto.request.CreateCandidatureDto;
 import com.tec.api_candidatura.web.dto.response.CandidatureResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,16 @@ public class CandidatureController {
     public ResponseEntity<CandidatureResponseDto> apply(@RequestBody CreateCandidatureDto dto) {
         return ResponseEntity.ok(candidatureService.apply(dto));
     }
+
+    @PostMapping("/apply")
+    public ResponseEntity<CandidatureResponseDto> applyAsLoggedUser(
+            @RequestBody ApplyToVacancyDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        CandidatureResponseDto response = candidatureService.applyLoggedUser(dto.jobVacancyId(), userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<CandidatureResponseDto>> getAll() {
