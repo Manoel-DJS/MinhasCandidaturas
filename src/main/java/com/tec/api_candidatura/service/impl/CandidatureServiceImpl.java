@@ -52,6 +52,25 @@ public class CandidatureServiceImpl implements CandidatureService {
     }
 
     @Override
+    public CandidatureResponseDto applyLoggedUser(Long jobVacancyId, String username) {
+        User user = (User) userRepository.findByName(username);
+        if (user == null) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+
+        JobVacancy vacancy = jobVacancyRepository.findById(jobVacancyId)
+                .orElseThrow(() -> new RuntimeException("Job vacancy not found"));
+
+        Candidature candidature = new Candidature();
+        candidature.setUser(user);
+        candidature.setJobVacancy(vacancy);
+        candidature.setStatusCandidature(StatusCandidature.SUBMITTED);
+
+        candidatureRepository.save(candidature);
+        return toDto(candidature);
+    }
+
+    @Override
     public List<CandidatureResponseDto> getAll() {
         return candidatureRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }

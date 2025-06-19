@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface CandidatureService {
     CandidatureResponseDto apply(CreateCandidatureDto dto);
+
+    CandidatureResponseDto applyLoggedUser(Long jobVacancyId, String username);
     List<CandidatureResponseDto> getAll();
 }
