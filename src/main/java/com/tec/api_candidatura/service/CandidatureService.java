@@ -12,4 +12,6 @@ public interface CandidatureService {
     CandidatureResponseDto applyLoggedUser(Long jobVacancyId, String username);
     List<CandidatureResponseDto> getAll();
     CandidatureResponseDto updateStatus(Long candidatureId, StatusCandidature status);
+    CandidatureResponseDto userUpdateStatus(Long candidatureId, StatusCandidature status, String username);
+
 }

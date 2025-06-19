@@ -93,6 +93,21 @@ public class CandidatureServiceImpl implements CandidatureService {
         return toDto(candidature);
     }
 
+    @Override
+    public CandidatureResponseDto userUpdateStatus(Long candidatureId, StatusCandidature status, String username) {
+        Candidature candidature = candidatureRepository.findById(candidatureId)
+                .orElseThrow(() -> new RuntimeException("Candidature not found"));
+
+        if (!candidature.getUser().getName().equals(username)) {
+            throw new RuntimeException("You are not allowed to update this candidature");
+        }
+
+        candidature.setStatusCandidature(status);
+        candidatureRepository.save(candidature);
+        return toDto(candidature);
+    }
+
+
 
     private CandidatureResponseDto toDto(Candidature c) {
         return new CandidatureResponseDto(
