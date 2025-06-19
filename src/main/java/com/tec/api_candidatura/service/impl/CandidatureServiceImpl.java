@@ -61,6 +61,13 @@ public class CandidatureServiceImpl implements CandidatureService {
         JobVacancy vacancy = jobVacancyRepository.findById(jobVacancyId)
                 .orElseThrow(() -> new RuntimeException("Job vacancy not found"));
 
+        Optional<Candidature> existing = candidatureRepository
+                .findByUserIdAndJobVacancyId(user.getId(), vacancy.getId());
+
+        if (existing.isPresent()) {
+            throw new RuntimeException("User has already applied to this job vacancy.");
+        }
+
         Candidature candidature = new Candidature();
         candidature.setUser(user);
         candidature.setJobVacancy(vacancy);
@@ -75,6 +82,16 @@ public class CandidatureServiceImpl implements CandidatureService {
         return candidatureRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public CandidatureResponseDto updateStatus(Long candidatureId, StatusCandidature status) {
+        Candidature candidature = candidatureRepository.findById(candidatureId)
+                .orElseThrow(() -> new RuntimeException("Candidature not found"));
+
+        candidature.setStatusCandidature(status);
+        candidatureRepository.save(candidature);
+
+        return toDto(candidature);
+    }
 
 
     private CandidatureResponseDto toDto(Candidature c) {
