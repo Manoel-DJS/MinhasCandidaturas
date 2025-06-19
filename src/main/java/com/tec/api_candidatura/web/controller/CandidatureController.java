@@ -43,6 +43,17 @@ public class CandidatureController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/my/{id}/status")
+    public ResponseEntity<CandidatureResponseDto> userUpdateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateCandidatureStatusDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        var response = candidatureService.userUpdateStatus(id, dto.status(), userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
+
 
 
     @GetMapping
