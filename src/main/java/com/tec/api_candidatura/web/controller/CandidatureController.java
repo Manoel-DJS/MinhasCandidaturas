@@ -3,6 +3,7 @@ package com.tec.api_candidatura.web.controller;
 import com.tec.api_candidatura.service.CandidatureService;
 import com.tec.api_candidatura.web.dto.request.ApplyToVacancyDto;
 import com.tec.api_candidatura.web.dto.request.CreateCandidatureDto;
+import com.tec.api_candidatura.web.dto.request.UpdateCandidatureStatusDto;
 import com.tec.api_candidatura.web.dto.response.CandidatureResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,16 @@ public class CandidatureController {
         CandidatureResponseDto response = candidatureService.applyLoggedUser(dto.jobVacancyId(), userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<CandidatureResponseDto> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateCandidatureStatusDto dto
+    ) {
+        CandidatureResponseDto response = candidatureService.updateStatus(id, dto.status());
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @GetMapping
