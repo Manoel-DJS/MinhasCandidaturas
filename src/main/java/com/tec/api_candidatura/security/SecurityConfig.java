@@ -34,6 +34,26 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v7/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v7/auth/login").permitAll()
 
+                        // CANDIDATURES
+                        .requestMatchers(HttpMethod.POST, "/api/v7/candidatures/apply").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v7/candidatures/").authenticated()
+
+                        .requestMatchers(HttpMethod.PATCH, "/api/v7/candidatures/{id}/status").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v7/candidatures/my/{id}/status").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v7/candidatures").hasAuthority("ROLE_ADMIN")
+
+                        // VACANCIES
+                        .requestMatchers(HttpMethod.POST, "/api/v7/vacancies").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v7/vacancies").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v7/vacancies/{id}").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v7/vacancies/{id}").hasAuthority("ROLE_ADMIN")
+
+                        // USERS
+                        .requestMatchers(HttpMethod.GET, "/api/v7/users/getIdUser").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v7/users/getAllUsers").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v7/users/{id}").authenticated()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
