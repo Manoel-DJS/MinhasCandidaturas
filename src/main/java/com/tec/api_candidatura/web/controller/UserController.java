@@ -25,7 +25,7 @@ public class UserController {
         return "OK";
     }
 
-    @GetMapping
+    @GetMapping("/getIdUser")
     public String getCurrentUserId(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         UUID userId = user.getId(); // ou getUuid(), dependendo do nome do campo
