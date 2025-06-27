@@ -1,5 +1,6 @@
 package com.tec.api_candidatura.web.controller;
 
+import com.tec.api_candidatura.documentation.JobVacancyControllerDocs;
 import com.tec.api_candidatura.service.JobVacancyService;
 import com.tec.api_candidatura.web.dto.request.CreateJobVacancyDto;
 import com.tec.api_candidatura.web.dto.request.UpdateJobVacancyDto;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v7/vacancies")
 @RequiredArgsConstructor
-public class JobVacancyController {
+public class JobVacancyController implements JobVacancyControllerDocs {
 
     private final JobVacancyService jobVacancyService;
 

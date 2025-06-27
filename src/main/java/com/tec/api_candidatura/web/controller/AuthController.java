@@ -1,5 +1,6 @@
 package com.tec.api_candidatura.web.controller;
 
+import com.tec.api_candidatura.documentation.AuthControllerDocs;
 import com.tec.api_candidatura.entity.User;
 import com.tec.api_candidatura.repository.UserRepository;
 import com.tec.api_candidatura.security.AuthorizationService;
@@ -26,7 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v7/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
     private final AuthenticationService authenticationService;
 

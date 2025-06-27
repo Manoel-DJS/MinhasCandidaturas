@@ -1,5 +1,6 @@
 package com.tec.api_candidatura.web.controller;
 
+import com.tec.api_candidatura.documentation.CandidatureControllerDocs;
 import com.tec.api_candidatura.service.CandidatureService;
 import com.tec.api_candidatura.web.dto.request.ApplyToVacancyDto;
 import com.tec.api_candidatura.web.dto.request.CreateCandidatureDto;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v7/candidatures")
 @RequiredArgsConstructor
-public class CandidatureController {
+public class CandidatureController implements CandidatureControllerDocs {
 
     private final CandidatureService candidatureService;
 
