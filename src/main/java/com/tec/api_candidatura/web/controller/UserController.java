@@ -1,5 +1,6 @@
 package com.tec.api_candidatura.web.controller;
 
+import com.tec.api_candidatura.documentation.UserControllerDocs;
 import com.tec.api_candidatura.entity.User;
 import com.tec.api_candidatura.service.UserService;
 import com.tec.api_candidatura.web.dto.request.UpdateUserDto;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v7/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
 
