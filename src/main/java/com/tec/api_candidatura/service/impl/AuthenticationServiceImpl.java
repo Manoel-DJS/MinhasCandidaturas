@@ -5,9 +5,13 @@ import com.tec.api_candidatura.repository.UserRepository;
 import com.tec.api_candidatura.security.TokenService;
 import com.tec.api_candidatura.service.AuthenticationService;
 import com.tec.api_candidatura.web.dto.request.RegisterUserDto;
+import com.tec.api_candidatura.web.exception.customException.InvalidCredentialsException;
+import com.tec.api_candidatura.web.exception.customException.UserAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +25,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String login(String username, String password) {
-        var auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
-        return tokenService.generateToken((User) auth.getPrincipal());
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+
+            return tokenService.generateToken((User) auth.getPrincipal());
+
+        } catch (BadCredentialsException ex) {
+            throw new InvalidCredentialsException("Usuário ou senha inválidos", ex);
+        }
     }
 
     @Override
     public String register(RegisterUserDto dto) {
         if (userRepository.findByName(dto.username()) != null) {
-            throw new IllegalArgumentException("Usuário já existe.");
+            throw new UserAlreadyExistsException("Usuário já existe.");
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
